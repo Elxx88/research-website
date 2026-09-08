@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Staff Login — Barangay Corregidor Admin</title>
+  <link rel="icon" type="image/png" href="logo-circle.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="dashboard.css">
+</head>
+<body class="no-sidebar">
+  <div class="admin-login-wrap">
+    <div class="admin-login-card">
+      <div class="badge">Staff Access Only</div>
+      <img class="admin-login-logo" src="logo-circle.png" alt="Barangay Corregidor Seal">
+      <h1>Barangay Corregidor</h1>
+      <p class="sub">Sign in to the admin panel to manage resident requests.</p>
+
+      <p class="admin-login-error" id="admin-login-error"></p>
+
+      <form id="admin-login-form">
+        <div class="form-group">
+          <label>Staff Email</label>
+          <input type="email" id="admin-email" placeholder="staff@barangay.gov" required />
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="admin-password" placeholder="••••••••" required />
+        </div>
+        <button type="submit" class="admin-login-submit">Log In</button>
+      </form>
+
+      <a href="index.html" class="admin-login-back">← Back to the resident site</a>
+    </div>
+  </div>
+
+  <script>
+    // Demo-only staff account. In production this checks against the
+    // "staff" table in MySQL via a Java Servlet instead of a hardcoded value.
+    const STAFF_ACCOUNT = { email: 'staff@barangay.gov', password: 'admin123', name: 'Staff Account' };
+
+    document.getElementById('admin-login-form').addEventListener('submit', function (e) {
+      e.preventDefault();
+      const email = document.getElementById('admin-email').value.trim().toLowerCase();
+      const password = document.getElementById('admin-password').value;
+      const errorEl = document.getElementById('admin-login-error');
+      errorEl.textContent = '';
+
+      if (email !== STAFF_ACCOUNT.email || password !== STAFF_ACCOUNT.password) {
+        errorEl.textContent = 'Incorrect staff email or password.';
+        return;
+      }
+
+      if (localStorage.getItem('userRole') === 'Resident') {
+        localStorage.setItem('residentSession', JSON.stringify({
+          isLoggedIn: localStorage.getItem('isLoggedIn'),
+          userEmail: localStorage.getItem('userEmail'),
+          userRole: localStorage.getItem('userRole'),
+          userName: localStorage.getItem('userName')
+        }));
+      }
+
+      localStorage.setItem('isLoggedIn', 'true');
+      localStorage.setItem('userEmail', email);
+      localStorage.setItem('userRole', 'Staff Account');
+      localStorage.setItem('userName', STAFF_ACCOUNT.name);
+      window.location.href = 'dashboard.html';
+    });
+  </script>
+</body>
+</html>

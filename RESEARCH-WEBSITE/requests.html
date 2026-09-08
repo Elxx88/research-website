@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Requests — Barangay Corregidor Admin</title>
+  <link rel="icon" type="image/png" href="logo-circle.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <img src="logo-circle.png" alt="Barangay Corregidor Seal">
+      <h2>Barangay Corregidor <span class="sidebar-subtitle">Admin Panel</span></h2>
+    </div>
+    <ul class="sidebar-menu">
+      <li><a href="dashboard.html" class="sidebar-link">Dashboard</a></li>
+      <li><a href="requests.html" class="sidebar-link selected-link">Requests</a></li>
+      <li><a href="#" class="sidebar-link">Residents</a></li>
+      <li><a href="#" class="sidebar-link">Reports</a></li>
+      <li><a href="#" class="sidebar-link">Settings</a></li>
+    </ul>
+    <div class="sidebar-footer">
+      <p class="sidebar-login"> Logged in as <strong class="sidebar-role" id="user-role">Staff Account</strong> </p>
+      <a href="index.html" class="resident-site-link" id="resident-site-link">Resident Website</a>
+      <button class="sidebar-logout-btn" id="logout-btn">Log out</button>
+    </div>
+  </aside>
+
+  <header class="board-header">
+    <div>
+      <h1 class="request-overview">
+        Accepted Requests
+      </h1>
+      <p class="request-desc">
+        Update each request as it moves from processing to ready for pickup.
+      </p>
+    </div>
+    <input type="text" class="board-search" placeholder="Search resident" id="search-input">
+  </header>
+
+  <main>
+    <article class="dash-data-container">
+      <div class="dash-data dash-data--processing">
+        <p class="dash-desc"><span class="dash-text" id="stat-processing">0</span>In processing</p>
+      </div>
+      <div class="dash-data dash-data--ready">
+        <p class="dash-desc"><span class="dash-text" id="stat-ready">0</span>Ready for pickup</p>
+      </div>
+    </article>
+
+    <article class="requests-container">
+      <div class="requests-header">
+        <h2 class="header">All Requests</h2>
+        <a href="dashboard.html" class="view-all">Back to Dashboard</a>
+      </div>
+      <table class="requests-table">
+        <thead>
+          <tr class="requests-row">
+            <th class="requests-cell">Resident</th>
+            <th class="requests-cell">Document</th>
+            <th class="requests-cell">Date Filed</th>
+            <th class="requests-cell">Status</th>
+            <th class="requests-cell"></th>
+          </tr>
+        </thead>
+        <tbody id="requestsBody"></tbody>
+      </table>
+    </article>
+  </main>
+
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal">
+      <div class="modal-head">
+        <h2 id="modalTitle">Request details</h2>
+        <button type="button" class="modal-close" id="modalClose" aria-label="Close">✕</button>
+      </div>
+      <div class="modal-body" id="modalBody"></div>
+    </div>
+  </div>
+
+  <script src="requests-data.js"></script>
+  <script>
+    (function() {
+      const isLoggedIn = localStorage.getItem('isLoggedIn');
+      const role = localStorage.getItem('userRole');
+
+      if (isLoggedIn !== 'true' || role !== 'Staff Account') {
+        window.location.href = 'admin-login.html';
+        return;
+      }
+
+      const roleEl = document.getElementById('user-role');
+      if (roleEl) roleEl.textContent = role;
+    })();
+
+    document.getElementById('logout-btn').addEventListener('click', function() {
+      localStorage.removeItem('isLoggedIn');
+      localStorage.removeItem('userEmail');
+      localStorage.removeItem('userRole');
+      window.location.href = 'admin-login.html';
+    });
+
+    document.getElementById('resident-site-link').addEventListener('click', function(e) {
+      e.preventDefault();
+      const session = JSON.parse(localStorage.getItem('residentSession') || 'null');
+
+      if (session) {
+        Object.entries(session).forEach(([key, value]) => localStorage.setItem(key, value));
+      } else {
+        ['isLoggedIn', 'userEmail', 'userRole', 'userName'].forEach(key => localStorage.removeItem(key));
+      }
+
+      localStorage.removeItem('residentSession');
+      window.location.href = 'index.html';
+    });
+
+    const body = document.getElementById('requestsBody');
+    const overlay = document.getElementById('modalOverlay');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalBody = document.getElementById('modalBody');
+    let currentFilter = '';
+
+    function renderStats(accepted) {
+      document.getElementById('stat-processing').textContent = accepted.filter(r => r.status === 'processing').length;
+      document.getElementById('stat-ready').textContent = accepted.filter(r => r.status === 'ready').length;
+    }
+
+    function renderTable() {
+      const all = getRequests();
+      let accepted = all.filter(r => r.status === 'processing' || r.status === 'ready');
+      renderStats(accepted);
+
+      if (currentFilter) {
+        const q = currentFilter.toLowerCase();
+        accepted = accepted.filter(r => (r.firstName + ' ' + r.lastName).toLowerCase().includes(q));
+      }
+
+      if (accepted.length === 0) {
+        body.innerHTML = '<tr><td colspan="5" class="empty-state">No accepted requests yet.</td></tr>';
+        return;
+      }
+
+      body.innerHTML = accepted.map(r => `
+        <tr class="requests-row">
+          <td class="requests-cell requests-resident">${r.firstName} ${r.lastName}</td>
+          <td class="requests-cell requests-document">${r.docType}</td>
+          <td class="requests-cell requests-date">${r.dateFiled}</td>
+          <td class="requests-cell">
+            <span class="chip ${r.status}">${statusLabel(r.status)}</span>
+          </td>
+          <td class="view-cell">
+            <a href="#" class="view" data-id="${r.id}">View</a>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function openModal(req) {
+      modalTitle.textContent = `${req.firstName} ${req.lastName}`;
+
+      modalBody.innerHTML = `
+        <div class="modal-row"><span>Document requested</span><strong>${req.docType}</strong></div>
+        <div class="modal-row"><span>Date filed</span><strong>${req.dateFiled}</strong></div>
+        <div class="modal-row"><span>Status</span><strong>${statusLabel(req.status)}</strong></div>
+        <div class="modal-row"><span>Address</span><strong>${req.address}</strong></div>
+        <div class="modal-row"><span>Contact number</span><strong>${req.contact}</strong></div>
+        <div class="modal-row"><span>Email</span><strong>${req.email}</strong></div>
+        <div class="modal-row"><span>Purpose</span><strong>${req.purpose || '—'}</strong></div>
+        <div class="modal-row"><span>Uploaded proof</span><strong>${req.proof || '—'}</strong></div>
+        ${req.proofImage ? `<img src="${req.proofImage}" alt="Uploaded proof" style="width:100%;border-radius:10px;margin-top:0.75rem;display:block;" />` : ''}
+        <div class="modal-actions">
+          <button type="button" class="btn-status ${req.status === 'processing' ? 'current' : ''}" id="processingBtn" ${req.status === 'processing' ? 'disabled' : ''}>Processing</button>
+          <button type="button" class="btn-status ${req.status === 'ready' ? 'current' : ''}" id="readyBtn" ${req.status === 'ready' ? 'disabled' : ''}>Ready for Pickup</button>
+        </div>
+      `;
+
+      document.getElementById('processingBtn').addEventListener('click', () => {
+        updateRequestStatus(req.id, 'processing');
+        closeModal();
+        renderTable();
+      });
+      document.getElementById('readyBtn').addEventListener('click', () => {
+        updateRequestStatus(req.id, 'ready');
+        closeModal();
+        renderTable();
+      });
+
+      overlay.classList.add('open');
+    }
+
+    function closeModal() {
+      overlay.classList.remove('open');
+    }
+
+    body.addEventListener('click', (e) => {
+      const link = e.target.closest('a[data-id]');
+      if (!link) return;
+      e.preventDefault();
+      const req = getRequests().find(r => r.id === link.dataset.id);
+      if (req) openModal(req);
+    });
+
+    document.getElementById('modalClose').addEventListener('click', closeModal);
+    overlay.addEventListener('click', (e) => { if (e.target === overlay) closeModal(); });
+
+    document.getElementById('search-input').addEventListener('input', (e) => {
+      currentFilter = e.target.value;
+      renderTable();
+    });
+
+    renderTable();
+  </script>
+</body>
+</html>

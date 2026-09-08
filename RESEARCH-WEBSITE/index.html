@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Barangay Corregidor | E-Document Request System</title>
+  <link rel="icon" type="image/png" href="logo-circle.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="nav-brand"><img src="logo-circle.png" alt="Barangay Corregidor Seal">Barangay Corregidor</div>
+    <ul class="nav-links">
+      <li><a href="#" class="nav-link active" data-page="home">Home</a></li>
+      <li><a href="#" class="nav-link" data-page="home" data-scroll="about">About</a></li>
+      <li><a href="#" class="nav-link" data-page="request">Request a Document</a></li>
+      <li><a href="#" class="nav-link" data-page="profile" id="nav-profile-link" style="display:none">Profile</a></li>
+      <li><a href="#" class="nav-link" data-page="login" id="nav-login-link">Profile</a></li>
+    </ul>
+    <button class="nav-btn" id="nav-login-btn" onclick="showPage('login')">Log In / Sign Up</button>
+    <div class="nav-user" id="nav-user">
+      <span id="nav-user-name" style="font-size:0.9rem;font-weight:600"></span>
+      <button class="nav-logout" onclick="handleLogout()">Log Out</button>
+    </div>
+  </nav>
+
+  <div id="home" class="page active">
+
+    <section class="hero">
+      <div class="hero-label">City of General Trias, Cavite</div>
+      <h1>BARANGAY</h1>
+      <div class="hero-badge">Corregidor</div>
+      <p class="hero-desc">
+        Request certifications, clearances, and barangay records online — track every step from submission to release, no more lining up at the hall.
+      </p>
+      <div class="hero-buttons">
+        <button class="btn btn-primary" onclick="showPage('request')">Request a Document</button>
+        <button class="btn btn-outline" onclick="showPage('login')">Log In / Sign Up</button>
+      </div>
+    </section>
+
+    <div class="stats">
+      <div class="stat-item">
+        <div class="stat-value">8</div>
+        <div class="stat-label">Document types available</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value">24/7</div>
+        <div class="stat-label">Online request access</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value">Digital</div>
+        <div class="stat-label">Records & e-notifications</div>
+      </div>
+    </div>
+
+    <section class="section" id="services">
+      <div class="header-glow">
+        <div class="section-header row">
+          <div>
+            <div class="section-label">Services</div>
+            <h2 class="section-title">WHAT YOU CAN REQUEST</h2>
+          </div>
+          <p class="section-desc">
+            Every certification and clearance issued by the barangay, now available through one online request form.
+          </p>
+        </div>
+      </div>
+
+      <div class="services-grid">
+        <div class="service-card">
+          <div class="service-num">01</div>
+          <div class="service-title">Barangay Certification / Clearance</div>
+          <p class="service-desc">General-purpose proof of residency for employment, school, or transactions.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-num">02</div>
+          <div class="service-title">Senior Citizen / PWD / Solo Parent Certification</div>
+          <p class="service-desc">Certification supporting benefits and discounts for qualified residents.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-num">03</div>
+          <div class="service-title">Certificate of Indigency</div>
+          <p class="service-desc">For residents applying for financial, medical, or educational assistance.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-num">04</div>
+          <div class="service-title">Certificate to File Action (CFA)</div>
+          <p class="service-desc">Required before filing a case in court, following barangay conciliation.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-num">05</div>
+          <div class="service-title">Certificate to Bar Action (CBA)</div>
+          <p class="service-desc">Confirms a dispute has gone through the barangay's conciliation process.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-num">06</div>
+          <div class="service-title">Certificate to Bar Counter-Claim (CBC)</div>
+          <p class="service-desc">Issued for counter-claims arising from barangay-level disputes.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-num">07</div>
+          <div class="service-title">Barangay Protection Order (BPO)</div>
+          <p class="service-desc">Emergency protection request for victims of abuse within the barangay.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-num">08</div>
+          <div class="service-title">Facilities & Properties Request</div>
+          <p class="service-desc">Reserve barangay halls, courts, or equipment for community use.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="how">
+      <div class="section-header" style="text-align:center">
+        <div class="section-label" style="justify-content:center">
+          <span style="width:20px;height:2px;background:var(--gold)"></span>
+          How it works
+        </div>
+        <h2 class="section-title">TWO STEPS, START TO FINISH</h2>
+      </div>
+
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">01</div>
+          <div class="step-content">
+            <h3>Submit your request online</h3>
+            <p>Fill out the form for the document you need and attach any required proof.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">02</div>
+          <div class="step-content">
+            <h3>Track processing in real time</h3>
+            <p>Get notified as barangay staff review and prepare your document.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="how-cta">
+        <button class="btn btn-primary" onclick="showPage('request')">Start a Request</button>
+      </div>
+    </section>
+
+    <section class="section" id="about">
+      <div class="section-header" style="text-align:center">
+        <div class="section-label" style="justify-content:center">
+          <span style="width:20px;height:2px;background:var(--gold)"></span>
+          About the system
+        </div>
+        <h2 class="section-title">SERVING CORREGIDOR, ONLINE</h2>
+        <p class="section-desc" style="margin:0.75rem auto 0; max-width:560px">
+          The E-Document Request System replaces manual, in-person processing with a tracked, digital workflow — built for residents and barangay staff alike.
+        </p>
+      </div>
+
+      <div class="about-highlight" style="margin-top:3rem">
+        <div class="section-label">ABOUT</div>
+        <h2 class="section-title" style="font-size:1.75rem; margin-bottom:0.5rem">WHY IT EXISTS</h2>
+        <p class="section-desc" style="max-width:720px">
+          This system lets residents request documents from home, see exactly where a request stands, and get notified the moment it's ready. For barangay staff, requests arrive organized and complete, with a digital record of every certificate issued, making them easier to search and report on. The result is faster processing for the whole community, freeing staff to spend less time on paperwork and more time on frontline resident services.
+        </p>
+      </div>
+
+      <div class="location-block">
+        <div class="location-badge">📍 Our Location</div>
+        <h2 class="section-title" style="font-size:2rem">Barangay Corregidor</h2>
+        <div class="location-underline"></div>
+        <p class="section-desc" style="margin:0 auto 2rem; max-width:520px; text-align:center">
+          Locate our barangay on the map — serving the City of General Trias, Cavite.
+        </p>
+        <div class="map-card">
+          <div class="map-label">
+            <strong>Barangay Corregidor, General Trias, Cavite</strong>
+            <span>9VPH+8MV</span>
+          </div>
+          <iframe
+            class="map-frame"
+            src="https://www.google.com/maps?q=9VPH%2B8MV,+General+Trias,+Cavite&output=embed"
+            allowfullscreen
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade">
+          </iframe>
+        </div>
+      </div>
+    </section>
+
+    <footer class="site-footer" id="contact">
+      <div class="section footer-inner">
+        <div class="section-header row">
+          <div>
+            <div class="section-label">Get in touch</div>
+            <h2 class="section-title">CONTACT THE BARANGAY</h2>
+          </div>
+          <p class="section-desc">
+            Have a question about a request, or need help in person? Reach us any of these ways.
+          </p>
+        </div>
+
+        <div class="contact-grid">
+          <div class="contact-card">
+            <h3>Visit the hall</h3>
+            <p>Barangay Corregidor Hall<br>9VPH+8MV, General Trias, Cavite</p>
+            <span class="contact-tag tag-blue">MON–FRI, 8:00 AM–5:00 PM</span>
+          </div>
+          <div class="contact-card">
+            <h3>Call us</h3>
+            <p>Barangay Hotline<br>(046) 000-0000</p>
+            <span class="contact-tag tag-blue">FOR URGENT CONCERNS</span>
+          </div>
+          <div class="contact-card">
+            <h3>Email us</h3>
+            <p>barangaycorregidor@gentrias.gov.ph</p>
+            <span class="contact-tag tag-green">RESPONSE WITHIN 1–2 DAYS</span>
+          </div>
+          <div class="contact-card">
+            <h3>Message us</h3>
+            <p>Facebook:<br>/BarangayCorregidorOfficial</p>
+            <span class="contact-tag tag-purple">FASTEST FOR QUICK QUESTIONS</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <span>© 2026 Barangay Corregidor, City of General Trias, Cavite</span>
+      </div>
+    </footer>
+  </div>
+
+  <div id="request" class="page">
+    <div class="form-container">
+      <div class="form-header">
+        <div class="section-label" style="justify-content:center; color:var(--gold)">
+          <span style="width:20px;height:2px;background:var(--gold);margin-right:0.5rem"></span>
+          Document Request
+        </div>
+        <h1 class="section-title" style="font-size:2.5rem">TELL US WHAT YOU NEED</h1>
+        <p class="section-desc" style="margin:0.5rem auto 0">
+          Fill in your details and the document you're requesting. You can track your request in your profile once it's submitted.
+        </p>
+      </div>
+
+      <form class="form-card" onsubmit="handleSubmit(event)">
+        <div class="form-group">
+          <label>Document Type</label>
+          <select id="req-doctype" required>
+            <option value="" disabled selected>Select a document</option>
+            <option>Barangay Certification / Clearance</option>
+            <option>Senior Citizen / PWD / Solo Parent Certification</option>
+            <option>Certificate of Indigency</option>
+            <option>Certificate to File Action (CFA)</option>
+            <option>Certificate to Bar Action (CBA)</option>
+            <option>Certificate to Bar Counter-Claim (CBC)</option>
+            <option>Barangay Protection Order (BPO)</option>
+            <option>Facilities & Properties Request</option>
+          </select>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>First Name</label>
+            <input type="text" id="req-firstname" placeholder="Juan" required />
+          </div>
+          <div class="form-group">
+            <label>Last Name</label>
+            <input type="text" id="req-lastname" placeholder="Dela Cruz" required />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Complete Address</label>
+          <input type="text" id="req-address" placeholder="House no., street, Barangay Corregidor" required />
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Contact Number</label>
+            <input type="tel" id="req-contact" placeholder="09XX XXX XXXX" required />
+          </div>
+          <div class="form-group">
+            <label>Email Address</label>
+            <input type="email" id="req-email" placeholder="you@email.com" required />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Purpose</label>
+          <input type="text" id="req-purpose" placeholder="e.g. Employment requirement, school requirement, financial assistance" />
+        </div>
+
+        <div class="form-group">
+          <label>Upload Supporting ID / Proof (Optional)</label>
+          <div class="file-input-wrap">
+            <label class="file-btn" for="file-upload">Choose File</label>
+            <input type="file" id="file-upload" onchange="updateFileName(this)" />
+            <span class="file-name" id="file-name">No file chosen</span>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary submit-btn">Submit Request</button>
+        <p class="form-note">You can track your request in your profile once it's submitted.</p>
+      </form>
+    </div>
+  </div>
+
+  <div id="login" class="page">
+    <div class="auth-container">
+      <h1 class="section-title" style="font-size:2.5rem; margin-bottom:0.5rem">RESIDENT ACCESS</h1>
+      <p class="section-desc" style="margin:0 auto 1.5rem">
+        Log in to track your requests, or create an account to get started.
+      </p>
+
+      <div class="auth-tabs">
+        <button class="auth-tab active" id="tab-login" onclick="switchAuth('login')">Log In</button>
+        <button class="auth-tab" id="tab-signup" onclick="switchAuth('signup')">Sign Up</button>
+      </div>
+
+      <form class="auth-card" id="login-form" onsubmit="handleLogin(event)">
+        <div class="login-hint">
+          Don't have an account yet? Sign up first.
+        </div>
+        <p class="auth-error" id="login-error"></p>
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" id="login-email" placeholder="you@email.com" required />
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="login-password" placeholder="••••••••" required />
+        </div>
+        <button type="submit" class="btn btn-primary submit-btn">Log In</button>
+        <p class="auth-footer">Don't have an account? <a href="#" onclick="switchAuth('signup'); return false;">Sign up</a></p>
+      </form>
+
+      <form class="auth-card" id="signup-form" style="display:none" onsubmit="handleSignup(event)">
+        <p class="auth-error" id="signup-error"></p>
+        <div class="form-row">
+          <div class="form-group">
+            <label>First Name</label>
+            <input type="text" id="signup-firstname" placeholder="Juan" required />
+          </div>
+          <div class="form-group">
+            <label>Last Name</label>
+            <input type="text" id="signup-lastname" placeholder="Dela Cruz" required />
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" id="signup-email" placeholder="you@email.com" required />
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="signup-password" placeholder="••••••••" required />
+        </div>
+        <div class="form-group">
+          <label>Confirm Password</label>
+          <input type="password" id="signup-confirm" placeholder="••••••••" required />
+        </div>
+        <button type="submit" class="btn btn-primary submit-btn">Create Account</button>
+        <p class="auth-footer">Already have an account? <a href="#" onclick="switchAuth('login'); return false;">Log in</a></p>
+      </form>
+    </div>
+  </div>
+
+  <!-- ========== RESIDENT PROFILE PAGE ========== -->
+  <div id="profile" class="page">
+    <div style="max-width:800px;margin:0 auto">
+      <div class="profile-header">
+        <div class="profile-user">
+          <div class="profile-avatar" id="profile-avatar">JD</div>
+          <div>
+            <div class="profile-name" id="profile-fullname">Juan Dela Cruz</div>
+            <div class="profile-meta">Resident of Barangay Corregidor • Member since 2026</div>
+          </div>
+        </div>
+        <div class="profile-actions">
+          <button class="btn btn-primary" onclick="showPage('request')">New Request</button>
+        </div>
+      </div>
+
+      <div class="section-label" style="margin-bottom:0.75rem">My Requests</div>
+      <h2 class="section-title" style="font-size:1.75rem;margin-bottom:1.5rem">TRACK YOUR DOCUMENTS</h2>
+
+      <div class="request-card">
+        <div class="request-card-top">
+          <div>
+            <div class="request-card-title">Barangay Certification / Clearance</div>
+            <div class="request-card-date">Filed on Aug 17, 2026</div>
+          </div>
+          <span class="status-badge status-pending">Pending</span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-step active"><div class="dot"></div>Pending</div>
+          <div class="progress-step"><div class="dot"></div>Processing</div>
+          <div class="progress-step"><div class="dot"></div>Ready for Pickup</div>
+        </div>
+      </div>
+
+      <div class="request-card">
+        <div class="request-card-top">
+          <div>
+            <div class="request-card-title">Certificate of Indigency</div>
+            <div class="request-card-date">Filed on Aug 15, 2026</div>
+          </div>
+          <span class="status-badge status-processing">Processing</span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-step done"><div class="dot"></div>Pending</div>
+          <div class="progress-step active"><div class="dot"></div>Processing</div>
+          <div class="progress-step"><div class="dot"></div>Ready for Pickup</div>
+        </div>
+      </div>
+
+      <div class="request-card">
+        <div class="request-card-top">
+          <div>
+            <div class="request-card-title">Senior Citizen Certification</div>
+            <div class="request-card-date">Filed on Aug 10, 2026</div>
+          </div>
+          <span class="status-badge status-ready">Ready for release</span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-step done"><div class="dot"></div>Pending</div>
+          <div class="progress-step done"><div class="dot"></div>Processing</div>
+          <div class="progress-step active"><div class="dot"></div>Ready for Pickup</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="requests-data.js"></script>
+  <script src="index.js"></script>
+</body>
+</html>
